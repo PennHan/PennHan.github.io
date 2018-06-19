@@ -5,9 +5,9 @@
 # Site
 title: Hexo
 subtitle:
-description:
+description: 
 keywords:
-author: John Doe
+author: PennHan
 language:
 timezone:
 
@@ -73,7 +73,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: next
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
