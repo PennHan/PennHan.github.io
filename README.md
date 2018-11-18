@@ -49,9 +49,23 @@ deploy.sh
 #### 问题汇总
 
 ==========================================================
-#git add不上#
+
+###### git add不上
+
 ```shell
 git rm -rf --cached vendor/crazyfd/yii2-qiniu 
 git add vendor/crazyfd/yii2-qiniu/*
 ```
+==========================================================
+##### fatal: in unpopulated submodule '.deploy_git'
 
+这种情况可以先安装下相关的依赖：
+```shell
+npm install hexo-deployer-git –save
+```
+实在不行，就把它删掉，然后重新生成和部署。
+```shell
+rm -rf .deploy_git
+hexo g
+hexo d
+```

@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="PennHan'blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="Android获取设备唯一标识需求对于移动端产品来说，能准确的识别、定位、跟踪一台设备是一件很重要的事，基于设备唯一性可以做的事有很多，比如设备锁、防作弊、安全防护等。但是在android和ios两大阵营上，都没有能标识设备唯一性的ID供开发者采集，所以就有了本篇文章，让我们来一起分析下android端可以用来标识唯一设备的属性、优缺点及解决方案。 备选设备IDIMEI国际移动设备识别码（Inte">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android获取设备唯一标识">
+<meta property="og:url" content="https://pennhan.top/2018/01/10/android-deviceId-20170310/index.html">
+<meta property="og:site_name" content="PennHan&#39;blog">
+<meta property="og:description" content="Android获取设备唯一标识需求对于移动端产品来说，能准确的识别、定位、跟踪一台设备是一件很重要的事，基于设备唯一性可以做的事有很多，比如设备锁、防作弊、安全防护等。但是在android和ios两大阵营上，都没有能标识设备唯一性的ID供开发者采集，所以就有了本篇文章，让我们来一起分析下android端可以用来标识唯一设备的属性、优缺点及解决方案。 备选设备IDIMEI国际移动设备识别码（Inte">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-18T04:31:25.397Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android获取设备唯一标识">
+<meta name="twitter:description" content="Android获取设备唯一标识需求对于移动端产品来说，能准确的识别、定位、跟踪一台设备是一件很重要的事，基于设备唯一性可以做的事有很多，比如设备锁、防作弊、安全防护等。但是在android和ios两大阵营上，都没有能标识设备唯一性的ID供开发者采集，所以就有了本篇文章，让我们来一起分析下android端可以用来标识唯一设备的属性、优缺点及解决方案。 备选设备IDIMEI国际移动设备识别码（Inte">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://pennhan.top/2018/01/10/android-deviceId-20170310/">
+
+
+
+
+
+  <title>Android获取设备唯一标识 | PennHan'blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">PennHan'blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://pennhan.top/2018/01/10/android-deviceId-20170310/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="PennHan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="PennHan'blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android获取设备唯一标识</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-10T00:00:50+08:00">
+                2018-01-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Android获取设备唯一标识"><a href="#Android获取设备唯一标识" class="headerlink" title="Android获取设备唯一标识"></a>Android获取设备唯一标识</h2><h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><p>对于移动端产品来说，能准确的识别、定位、跟踪一台设备是一件很重要的事，基于设备唯一性可以做的事有很多，比如设备锁、防作弊、安全防护等。但是在android和ios两大阵营上，都没有能标识设备唯一性的ID供开发者采集，所以就有了本篇文章，让我们来一起分析下android端可以用来标识唯一设备的属性、优缺点及解决方案。</p>
+<h3 id="备选设备ID"><a href="#备选设备ID" class="headerlink" title="备选设备ID"></a>备选设备ID</h3><h4 id="IMEI"><a href="#IMEI" class="headerlink" title="IMEI"></a>IMEI</h4><p>国际移动设备识别码（International Mobile Equipment Identity，IMEI），即通常所说的手机序列号、手机“串号”，用于在移动电话网络中识别每一部独立的手机等行动通讯装置，相当于移动电话的身份证。序列号共有15位数字，前6位（TAC）是型号核准号码，代表手机类型。接着2位（FAC）是最后装配号，代表产地。后6位（SNR）是串号，代表生产顺序号。最后1位（SP）一般为0，是检验码，备用。</p>
+<h5 id="获取方式"><a href="#获取方式" class="headerlink" title="获取方式"></a>获取方式</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);</span><br><span class="line">String imei = manager.getDeviceId();</span><br></pre></td></tr></table></figure>
+<h5 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h5><ul>
+<li>可以被作弊软件修改。</li>
+<li>厂商定制系统中的Bug：少数手机设备上，由于该实现有漏洞，会返回垃圾。如000000000000000、11111111111111111.</li>
+<li>手机管家，360手机助手，和一些厂商ROM自带的权限管家，有阻止应用采集手机IMEI的功能</li>
+<li>山寨手机厂商为了节省成本，批量复制重复IMEI串烧进手机的EEPROM里面。</li>
+</ul>
+<h4 id="Mac-Address"><a href="#Mac-Address" class="headerlink" title="Mac Address"></a>Mac Address</h4><p>wifi无线网卡的MAC地址，与终端硬件关联，可用作设备的唯一标识。</p>
+<h5 id="获取方式-1"><a href="#获取方式-1" class="headerlink" title="获取方式"></a>获取方式</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);</span><br><span class="line">WifiInfo info = wifi.getConnectionInfo();</span><br><span class="line">String mac = info.getMacAddress();</span><br></pre></td></tr></table></figure>
+<h5 id="问题-1"><a href="#问题-1" class="headerlink" title="问题"></a>问题</h5><p>可以被作弊软件修改。<br>Android6.0及以上的系统上，通过上面的系统接口采集到的MAC地址返回的是一个固定串：02:00:00:00:00:00</p>
+<h4 id="IMSI"><a href="#IMSI" class="headerlink" title="IMSI"></a>IMSI</h4><p>国际移动用户识别码（IMSI：International Mobile Subscriber Identification Number）是区别移动用户的标志，储存在SIM卡中，可用于区别移动用户的有效信息。其总长度不超过15位，同样使用0~9的数字。其中MCC是移动用户所属国家代号，占3位数字，中国的MCC规定为460；MNC是移动网号码，由两位或者三位数字组成，中国移动的移动网络编码（MNC）为00；用于识别移动用户所归属的移动通信网；MSIN是移动用户识别码，用以识别某一移动通信网中的移动用户。此ID是跟SIM卡绑定的，更换SIM卡就会发生变化，同样在仅支持wifi的pad设备上是没有的。</p>
+<h5 id="获取方式-2"><a href="#获取方式-2" class="headerlink" title="获取方式"></a>获取方式</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);</span><br><span class="line">String imsi = manager.getSubscriberId();</span><br></pre></td></tr></table></figure>
+<p>#####问题<br>存在无SIM卡的终端设备获取不到的问题<br>最大的问题是会发生变化，与终端设备非强绑定。</p>
+<h4 id="Android-ID"><a href="#Android-ID" class="headerlink" title="Android_ID"></a>Android_ID</h4><p>Android_ID是设备首次启动时，系统生成的一个唯一串号，长16字节(例：70560687d711af97)，由com.android.providers.settings 这个系统程序所管理，Android6.0 以下储存在/data/data/com.android.providers.settings/databases/settings.db中的secure 表。</p>
+<h5 id="获取方式-3"><a href="#获取方式-3" class="headerlink" title="获取方式"></a>获取方式</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Settings.Secure.getString(context.getContentResolver(), <span class="string">"android_id"</span>)</span><br></pre></td></tr></table></figure>
+<h5 id="问题-2"><a href="#问题-2" class="headerlink" title="问题"></a>问题</h5><p>此ID与硬件无关，与Android系统有关，所以当系统还原出厂设置，刷机时这个ID就会重新生成了。<br>由于国内的手机基本都是厂商定制的ROM，所以此ID的控制权均由厂商ROM层来控制，难免会发生一些bug，导致部分机型上的ID都相同。<br>另外在OTA ROM升级的时候，有些厂商会保留原有db信息不变，有些厂商会清除重新生成。<br>与系统强依赖，稳定性不足。</p>
+<h4 id="CID"><a href="#CID" class="headerlink" title="CID"></a>CID</h4><p>Card Identification Register(CID)，顾名思义，做为存储卡片的唯一识别信息，规范上要求每张卡片的ID都唯一。CID 寄存器有 16 字节长，如下表 所示，它包含了本卡的特别识别码（ID 号）。 这些信息是在卡的生产期间被编程（烧录），主控制器不 能修改它们的内容。 注意：SD卡的 CID 寄存器和 MMC 卡的 CID 寄存器在记录结构上是不同的。一般来讲MMC0 保存的是内置存储卡的信息，MMC1 保存的是扩展存储卡也就是SD卡的信息。因为SD卡跟终端设备又不是强关联的，会因为更换升级发生变化，那么我们主要看手机内置存储卡的CID。</p>
+<h5 id="获取方式-4"><a href="#获取方式-4" class="headerlink" title="获取方式"></a>获取方式</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb shell cat /sys/class/mmc_host/mmc*/mmc*:*/cid</span><br></pre></td></tr></table></figure>
+<p>#####问题<br>在部分山寨低端机器上，会出现采集不到和采集的是SD卡的CID。</p>
+<h3 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h3><p>通过以上对可能作为设备唯一ID的属性分析后可以看到，没有一个属性可以作为标识设备的唯一ID，我们可能抱着90%多的有效率，选择某一个属性作为设备的唯一标识，又不可避免android端复杂的系统、定制厂商、root等环境。所以这里给出的方案又不能称之为方案，只是尽可能的标识唯一设备。所以方案可能是这样的：</p>
+<p>按照以上分析的稳定性和可靠性分下先后顺序：</p>
+<p>##CID &gt; IMEI &gt; MAC &gt; ANDROID_ID##<br>生成deviceId规则为：<br>按照以上先后顺序依次获取，判断取得的值的有效性，有效的场合返回，无效的场合获取下一个值；直到取到有效值，都无效的场合使用UUID随机生成。<br>在尽可能获得设备唯一ID的基础上，将获得的ID保存在本地，下次直接从内存或外部存储中读取。这样尽量保证获取的设备id的唯一性。</p>
+<p>Tip：保存到SD卡的设备ID可以保存为”.xxxx.txt”的形式，隐藏文件也能尽可能不会被用户误删。</p>
+<p>所以，所谓的方案只是提供了一种简单的思路，不是什么完美的解决方案。</p>
+<h3 id="兼容性问题"><a href="#兼容性问题" class="headerlink" title="兼容性问题"></a>兼容性问题</h3><p>大家都知道在Android6.0系统上，新增了不少特性，与终端ID采集密切相关的就是权限控制这个特性，结论如下：</p>
+<p>IMEI，IMSI需用户手动授权方可采集。<br>6.0里面READ_PHONE_STATE权限被归属成敏感权限，在运行时，如果应用程序获取TelephonyManager实例时，系统就会弹出是否允许应用拨打电话和管理通话的选择对话框，用户拒绝之后，就采集不到。<br>针对6.0及以上的系统，ID的采集需要进行兼容，使用 checkPermission 接口从内存中直接获取权限数据，判断用户是否已经授权。</p>
+<p>MAC地址通过非系统接口可采集(6.0以下通过系统接口采集)，采集场景仅限于处于wifi连接状态。<br>非系统接口，其实指的就是直接读取文件的方式，如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cat /sys/<span class="class"><span class="keyword">class</span>/<span class="title">net</span>/<span class="title">wlan0</span>/<span class="title">address</span> </span></span><br><span class="line"><span class="class"><span class="title">cat</span> /<span class="title">sys</span>/<span class="title">devices</span>/<span class="title">virtual</span>/<span class="title">net</span>/<span class="title">wlan0</span>/<span class="title">address</span></span></span><br></pre></td></tr></table></figure>
+<p>AndroidID采集不受影响，但此ID不与硬件绑定，刷机，系统还原，升级等场景会发生变化，不稳定。</p>
+<blockquote>
+<p>说明：应用编译时选择的targetSdkVersion&gt;=23，在6.0及以上的系统运行才会触发权限提示框，&lt;23打出的apk包不受此影响。</p>
+</blockquote>
+<h3 id="备注"><a href="#备注" class="headerlink" title="备注"></a>备注</h3><p>以上大部分内容引自腾讯质量开放平台,在此感谢。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/21/Kotlin初探/" rel="next" title="Kotlin初探">
+                <i class="fa fa-chevron-left"></i> Kotlin初探
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/18/前端脱离后台的敏捷开发/" rel="prev" title="前端脱离后台的敏捷开发">
+                前端脱离后台的敏捷开发 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">PennHan</p>
+              <p class="site-description motion-element" itemprop="description">在Android的道路上摸爬滚打，望有光明向我招手。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Android获取设备唯一标识"><span class="nav-number">1.</span> <span class="nav-text">Android获取设备唯一标识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#需求"><span class="nav-number">1.1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#备选设备ID"><span class="nav-number">1.2.</span> <span class="nav-text">备选设备ID</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IMEI"><span class="nav-number">1.2.1.</span> <span class="nav-text">IMEI</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#获取方式"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">获取方式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#问题"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">问题</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Mac-Address"><span class="nav-number">1.2.2.</span> <span class="nav-text">Mac Address</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#获取方式-1"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">获取方式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#问题-1"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">问题</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IMSI"><span class="nav-number">1.2.3.</span> <span class="nav-text">IMSI</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#获取方式-2"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">获取方式</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Android-ID"><span class="nav-number">1.2.4.</span> <span class="nav-text">Android_ID</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#获取方式-3"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">获取方式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#问题-2"><span class="nav-number">1.2.4.2.</span> <span class="nav-text">问题</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CID"><span class="nav-number">1.2.5.</span> <span class="nav-text">CID</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#获取方式-4"><span class="nav-number">1.2.5.1.</span> <span class="nav-text">获取方式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方案"><span class="nav-number">1.3.</span> <span class="nav-text">方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#兼容性问题"><span class="nav-number">1.4.</span> <span class="nav-text">兼容性问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#备注"><span class="nav-number">1.5.</span> <span class="nav-text">备注</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">PennHan</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

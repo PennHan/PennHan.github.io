@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="PennHan'blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="介绍Postman是google开发的一款功能强大的网页调试与发送网页HTTP请求，并能运行测试用例的的Chrome插件。其主要功能包括：模拟各种HTTP requests从常用的 GET、POST 到 RESTful 的 PUT 、 DELETE …等等。 甚至还可以发送文件、送出额外的 header。 Collection 功能（测试集合）Collection 是 requests的集合，在做">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="通过postman提升接口测试效率">
+<meta property="og:url" content="https://pennhan.top/2017/05/10/通过postman提升接口测试效率/index.html">
+<meta property="og:site_name" content="PennHan&#39;blog">
+<meta property="og:description" content="介绍Postman是google开发的一款功能强大的网页调试与发送网页HTTP请求，并能运行测试用例的的Chrome插件。其主要功能包括：模拟各种HTTP requests从常用的 GET、POST 到 RESTful 的 PUT 、 DELETE …等等。 甚至还可以发送文件、送出额外的 header。 Collection 功能（测试集合）Collection 是 requests的集合，在做">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-18T04:31:25.398Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="通过postman提升接口测试效率">
+<meta name="twitter:description" content="介绍Postman是google开发的一款功能强大的网页调试与发送网页HTTP请求，并能运行测试用例的的Chrome插件。其主要功能包括：模拟各种HTTP requests从常用的 GET、POST 到 RESTful 的 PUT 、 DELETE …等等。 甚至还可以发送文件、送出额外的 header。 Collection 功能（测试集合）Collection 是 requests的集合，在做">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://pennhan.top/2017/05/10/通过postman提升接口测试效率/">
+
+
+
+
+
+  <title>通过postman提升接口测试效率 | PennHan'blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">PennHan'blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://pennhan.top/2017/05/10/通过postman提升接口测试效率/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="PennHan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="PennHan'blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">通过postman提升接口测试效率</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-10T00:16:54+08:00">
+                2017-05-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Postman是google开发的一款功能强大的网页调试与发送网页HTTP请求，并能运行测试用例的的Chrome插件。其主要功能包括：<br>模拟各种HTTP requests<br>从常用的 GET、POST 到 RESTful 的 PUT 、 DELETE …等等。 甚至还可以发送文件、送出额外的 header。</p>
+<h3 id="Collection-功能（测试集合）"><a href="#Collection-功能（测试集合）" class="headerlink" title="Collection 功能（测试集合）"></a>Collection 功能（测试集合）</h3><p>Collection 是 requests的集合，在做完一個测试的時候， 你可以把這次的 request 存到特定的 Collection 里面，如此一來，下次要做同样的测试时，就不需要重新输入。而且一个collection可以包含多条request，如果我们把一个request当成一个test case，那collection就可以看成是一个test suite。通过collection的归类，我们可以良好的分类测试软件所提供的API.而且 Collection 还可以 Import 或是 Share 出來，让团队里面的所有人共享你建立起來的 Collection。</p>
+<h3 id="人性化的Response整理"><a href="#人性化的Response整理" class="headerlink" title="人性化的Response整理"></a>人性化的Response整理</h3><p>一般在用其他工具來测试的時候，response的内容通常都是纯文字的 raw， 但如果是 JSON ，就是塞成一整行的 JSON。这会造成阅读的障碍 ，而 Postman 可以针对response内容的格式自动美化。 JSON、 XML 或是 HTML 都會整理成我们可以阅读的格式<br>内置测试脚本语言<br>Postman支持编写测试脚本，可以快速的检查request的结果，并返回测试结果</p>
+<h3 id="设定变量与环境"><a href="#设定变量与环境" class="headerlink" title="设定变量与环境"></a>设定变量与环境</h3><p>Postman 可以自由 设定变量与Environment，一般我们在编辑request，校验response的时候，总会需要重复输入某些字符，比如url，postman允许我们设定变量来保存这些值。并且把变量保存在不同的环境中。比如，我們可能会有多种环境， development 、 staging 或 local， 而这几种环境中的 request URL 也各不相同，但我们可以在不同的环境中设定同样的变量，只是变量的值不一样，这样我们就不用修改我们的测试脚本，而测试不同的环境。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>从chrome的扩展程序中安装</p>
+<h3 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h3><p>打开postman之后如下图所示,左边是项目具体的接口,右上上面是请求链接,请求体,右边下面是具体的响应体</p>
+<h3 id="URL"><a href="#URL" class="headerlink" title="URL"></a>URL</h3><p>要组装一条Request, URL永远是你首先要填的内容，在Postman里面你曾输入过的URL是可以通过下拉自动补全的哦。如果你点击Params按钮，Postman会弹出一个键值编辑器，你可以在哪里输入URL的Parameter，Postman会帮你自动加入到URL当中，反之，如果你的URL当中已经有了参数，那Postman会在你打开键值编辑器的时候把参数自动载入<br>Headers<br>点击’Headers’按钮，Postman同样会弹出一个键值编辑器。在这里，你可以随意添加你想要的Header attribute，同样Postman为我们通过了很贴心的auto-complete功能，敲入一个字母，你可以从下拉菜单里选择你想要的标准atrribute<br>Method<br>要选择Request的Method是很简单的，Postman支持所有的Method，而一旦你选择了Method，Postman的request body编辑器会根据的你选择，自动的发生改变<br>Request Body<br>如果我们要创建的request是类似于POST，那我们就需要编辑Request Body，Postman根据body type的不同，提供了4中编辑方式：</p>
+<h3 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h3><p>cookies<br>分开打包的应用程序运行在沙箱浏览器,它不能访问cookie设置浏览器内。这种限制也可以使用拦截器扩展。</p>
+<p>身份验证Authentication<br>postman有一个helpers可以帮助我们简化一些重复和复杂的任务。当前的一套helpers可以帮助你解决一些authentication protocols的问题。</p>
+<p>Basic Auth<br>填写用户名和密码，点击Refresh headers</p>
+<p>Digest Auth<br>要比Basic Auth复杂的多。使用当前填写的值生成authorization header。所以在生成header之前要确保设置的正确性。如果当前的header已经存在，postman会移除之前的header。</p>
+<p>OAuth 1.0a<br>postman的OAuth helper让你签署支持OAuth 1.0基于身份验证的请求。OAuth不用获取access token,你需要去API提供者获取的。OAuth 1.0可以在header或者查询参数中设置value。</p>
+<p>OAuth 2.0<br>postman支持获得OAuth 2.0 token并添加到requests中。</p>
+<p>Writting Test<br>Postman的Tests标签可以用来写测试：</p>
+<p>本质上是javascript code，可以为tests object设置values。这里使用描述性文字作为key，检验body中的各种情况，当然你可以创建任意多的key，这取决于你需要测试多少点。 tests也会随着request保存到collection中。api测试保证前端后台都能正常的于api协作工作，而不用在出错时猜测是哪里的问题。 需要在request的test中创建了test后，再进行request，test的结果在body的test中查看。 注意： 1.这里的key描述必须是唯一的，否则相同描述只会执行第一个。 2.这里的key可以使用中文。 例子： tests[“Body contains user_id”] = responseBody.has(“user_id”) 这里描述性的key为：Body contains user_id。检测点为：responseBody.has(“user_id”)，意思是检测返回的body中是否包含”user_id”这个字段。<br>查看responses中的Tests结果：记过显示每个key,也就是我们测试点的具体结果，是否通过。</p>
+<p>Testing Sandbox<br>postman的测试是运行在沙箱环境，是与app独立的。查看什么在沙箱中是可用的，参见Sandbox documentation.</p>
+<p>Snippets<br>用于快速添加常用的测试代码。可以自定义snippets。</p>
+<p>Viewing results<br>postman每次执行request的时候，会执行tests。测试结果会在tests的tab上面显示一个通过的数量。</p>
+<p>Testing Sandbox<br>Testing examples<br>测试代码会在发送request并且接收到responses后执行。</p>
+<p>1.设置环境变量 postman.setEnvironmentVariable(“key”, “value”);<br>2.设置全局变量 postman.setGlobalVariable(“key”, “value”);<br>3.检查response body中是否包含某个string tests[“Body matches string”] = responseBody.has(“string_you_want_to_search”);<br>4.检测JSON中的某个值是否等于预期的值<br>var data = JSON.parse(responseBody);<br>tests[“Your test name”] = data.value === 100;<br>JSON.parse()方法，把json字符串转化为对象。parse()会进行json格式的检查是一个安全的函数。 如：检查json中某个数组元素的个数(这里检测programs的长度)<br>var data = JSON.parse(responseBody);<br>tests[“program’s lenght”] = data.programs.length === 5;<br>5.转换XML body为JSON对象 var jsonObject = xml2Json(responseBody);<br>6.检查response body是否与某个string相等 tests[“Body is correct”] = responseBody === “response_body_string”;<br>7.测试response Headers中的某个元素是否存在(如:Content-Type)<br>tests[“Content-Type is present”] = postman.getResponseHeader(“Content-Type”);<br>//getResponseHeader()方法会返回header的值，如果该值存在<br>或者：<br>tests[“Content-Type is present”] = responseHeaders.hasOwnProperty(“Content-Type”);<br>上面的方法，不区分大小写。下面的方法，要区分大小写。</p>
+<p>8.验证Status code的值 tests[“Status code is 200”] = responseCode.code === 200;</p>
+<p>9.验证Response time是否小于某个值 tests[“Response time is less than 200ms”] = responseTime &lt; 200;<br>10.name是否包含某个值 tests[“Status code name has string”] = responseCode.name.has(“Created”);<br>11.POST 请求的状态响应码是否是某个值 tests[“Successful POST request”] = responseCode.code === 201 || responseCode.code === 202;<br>12.很小的JSON数据验证器<br>var schema = {<br>“items”: {<br>“type”: “boolean”<br>}<br>};<br>var data1 = [true, false];<br>var data2 = [true, 123];<br>console.log(tv4.error);<br>tests[“Valid Data1”] = tv4.validate(data1, schema);<br>tests[“Valid Data2”] = tv4.validate(data2, schema);<br>结果：<br>运行Collections<br>postman允许你运行collection，你可以运行任意的次数。 最后会给出一个整体运行的结果。会保存每一次运行的结果，提供给你比较每一次运行解雇的不同。<br>选择collection，选择环境。点击运行按钮。</p>
+<p>在需要csv和json文件的地方记得添加。<br>运行collection测试会在另一个窗口运行。如果需要在main窗口修改东西，在新窗口能正常读取。</p>
+<p>参考文档：</p>
+<p><a href="https://juejin.im/entry/57597a62a341310061337885" target="_blank" rel="noopener">https://juejin.im/entry/57597a62a341310061337885</a></p>
+<p><a href="http://www.jianshu.com/p/9d36e77fab9e" target="_blank" rel="noopener">http://www.jianshu.com/p/9d36e77fab9e</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/12/android-JNI实现字符串加密解密和验证-20170312/" rel="next" title="JNI实现字符串加密解密和验证">
+                <i class="fa fa-chevron-left"></i> JNI实现字符串加密解密和验证
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/16/微信小程序项目开发总结/" rel="prev" title="微信小程序项目开发总结">
+                微信小程序项目开发总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">PennHan</p>
+              <p class="site-description motion-element" itemprop="description">在Android的道路上摸爬滚打，望有光明向我招手。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Collection-功能（测试集合）"><span class="nav-number">2.</span> <span class="nav-text">Collection 功能（测试集合）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#人性化的Response整理"><span class="nav-number">3.</span> <span class="nav-text">人性化的Response整理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设定变量与环境"><span class="nav-number">4.</span> <span class="nav-text">设定变量与环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装"><span class="nav-number">5.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#入门"><span class="nav-number">6.</span> <span class="nav-text">入门</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#URL"><span class="nav-number">7.</span> <span class="nav-text">URL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进阶"><span class="nav-number">8.</span> <span class="nav-text">进阶</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">PennHan</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
