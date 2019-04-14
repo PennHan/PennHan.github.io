@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Android,">
+  <meta name="keywords" content="Hexo, NexT">
 
 
 
@@ -81,18 +81,16 @@
 
 
 
-<meta name="description" content="需求我们公认的，在java层的加解密运算都是不安全的，因为apk可以被反编译，你的加解密算法会很容易的暴露出去。一些现有的对称加密算法，密钥必须要在客户端保留，所以也是不安全的；这里不包括和后台通讯时使用的RSA加密，客户端保留公钥加密，后台使用私钥解密，这也是现有的比较大众的做法，但是如果只在客户端做加解密，我想很对人都会想到使用JNI技术，因为对于反编译而言，c／c++的代码反编译难度更大，增">
-<meta name="keywords" content="Android">
-<meta property="og:type" content="article">
-<meta property="og:title" content="JNI实现字符串加密解密和验证">
-<meta property="og:url" content="https://pennhan.top/2017/03/12/android-JNI实现字符串加密解密和验证-20170312/index.html">
+<meta name="description" content="在Android的道路上摸爬滚打，望有光明向我招手。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="PennHan&#39;blog">
+<meta property="og:url" content="https://pennhan.top/page/2/index.html">
 <meta property="og:site_name" content="PennHan&#39;blog">
-<meta property="og:description" content="需求我们公认的，在java层的加解密运算都是不安全的，因为apk可以被反编译，你的加解密算法会很容易的暴露出去。一些现有的对称加密算法，密钥必须要在客户端保留，所以也是不安全的；这里不包括和后台通讯时使用的RSA加密，客户端保留公钥加密，后台使用私钥解密，这也是现有的比较大众的做法，但是如果只在客户端做加解密，我想很对人都会想到使用JNI技术，因为对于反编译而言，c／c++的代码反编译难度更大，增">
+<meta property="og:description" content="在Android的道路上摸爬滚打，望有光明向我招手。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-05T03:28:28.594Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JNI实现字符串加密解密和验证">
-<meta name="twitter:description" content="需求我们公认的，在java层的加解密运算都是不安全的，因为apk可以被反编译，你的加解密算法会很容易的暴露出去。一些现有的对称加密算法，密钥必须要在客户端保留，所以也是不安全的；这里不包括和后台通讯时使用的RSA加密，客户端保留公钥加密，后台使用私钥解密，这也是现有的比较大众的做法，但是如果只在客户端做加解密，我想很对人都会想到使用JNI技术，因为对于反编译而言，c／c++的代码反编译难度更大，增">
+<meta name="twitter:title" content="PennHan&#39;blog">
+<meta name="twitter:description" content="在Android的道路上摸爬滚打，望有光明向我招手。">
 
 
 
@@ -122,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://pennhan.top/2017/03/12/android-JNI实现字符串加密解密和验证-20170312/">
+  <link rel="canonical" href="https://pennhan.top/page/2/">
 
 
 
 
 
-  <title>JNI实现字符串加密解密和验证 | PennHan'blog</title>
+  <title>PennHan'blog</title>
   
 
 
@@ -147,7 +145,8 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left 
+  page-home">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -220,9 +219,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-
-  <div id="posts" class="posts-expand">
+  <section id="posts" class="posts-expand">
     
+      
 
   
 
@@ -252,7 +251,9 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">JNI实现字符串加密解密和验证</h1>
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/03/12/android-JNI实现字符串加密解密和验证-20170312/" itemprop="url">JNI实现字符串加密解密和验证</a></h1>
         
 
         <div class="post-meta">
@@ -302,7 +303,9 @@
       
 
       
-        <h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><p>我们公认的，在java层的加解密运算都是不安全的，因为apk可以被反编译，你的加解密算法会很容易的暴露出去。一些现有的对称加密算法，密钥必须要在客户端保留，所以也是不安全的；这里不包括和后台通讯时使用的RSA加密，客户端保留公钥加密，后台使用私钥解密，这也是现有的比较大众的做法，但是如果只在客户端做加解密，我想很对人都会想到使用JNI技术，因为对于反编译而言，c／c++的代码反编译难度更大，增加了反编译的成本。下面是我的实战经历分享给大家。</p>
+        
+          
+            <h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><p>我们公认的，在java层的加解密运算都是不安全的，因为apk可以被反编译，你的加解密算法会很容易的暴露出去。一些现有的对称加密算法，密钥必须要在客户端保留，所以也是不安全的；这里不包括和后台通讯时使用的RSA加密，客户端保留公钥加密，后台使用私钥解密，这也是现有的比较大众的做法，但是如果只在客户端做加解密，我想很对人都会想到使用JNI技术，因为对于反编译而言，c／c++的代码反编译难度更大，增加了反编译的成本。下面是我的实战经历分享给大家。</p>
 <h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><p>开发工具：Android studio</p>
 <ul>
 <li>搭建NDK开发环境</li>
@@ -340,6 +343,8 @@
 </ul>
 <p>希望大家都能在IT这条道路上走的更远～<br>共勉～</p>
 
+          
+        
       
     </div>
     
@@ -354,40 +359,14 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Android/" rel="tag"># Android</a>
-          
-        </div>
+
+      
+
       
 
       
       
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2017/02/10/other-firstblog-20170210/" rel="next" title="开启全新的技术探索之旅">
-                <i class="fa fa-chevron-left"></i> 开启全新的技术探索之旅
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/05/10/通过postman提升接口测试效率/" rel="prev" title="通过postman提升接口测试效率">
-                通过postman提升接口测试效率 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
+        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -397,11 +376,141 @@
   </article>
 
 
+    
+      
 
-    <div class="post-spread">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://pennhan.top/2017/02/10/other-firstblog-20170210/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="PennHan">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="PennHan'blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/02/10/other-firstblog-20170210/" itemprop="url">开启全新的技术探索之旅</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-10T23:45:51+08:00">
+                2017-02-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="开启全新的技术探索之旅"><a href="#开启全新的技术探索之旅" class="headerlink" title="开启全新的技术探索之旅"></a>开启全新的技术探索之旅</h2><h3 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h3><p>之前写博客都是在CSDN，虽然很方便但是这种托管方式缺少了定制性，页面也不是很美观（在这看脸的时代里- -），本来自己的博客就像是自己的亲生子女一样，苦心养育却有种养糟了的感觉，所以使用hexo+github pages搭建了新的博客。经过一下午的折腾，终于算是初具雏形。心情很是美好。而且今天是星期五！更重要的，今天发工资！哈哈哈，简直不能再高兴了！</p>
+<h3 id="近期打算"><a href="#近期打算" class="headerlink" title="近期打算"></a>近期打算</h3><p>由于近期一直在做一个项目，项目中有几个点我觉得有必要记录下，博客内容可能是</p>
+<ul>
+<li>获取设备唯一标识</li>
+<li>android JNI实现字符串加解密和验证<br>看时间吧，估计这两个礼拜就能整理出来。</li>
+</ul>
+<h3 id="分享"><a href="#分享" class="headerlink" title="分享"></a>分享</h3><p>关于搭建过程，可以参考一下这篇文章,很全面，门槛也比较低。</p>
+<p>希望能在技术的道路上走的更远～</p>
+
+          
+        
       
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </div>
+  
+  
+  
+  </article>
+
+
+    
+  </section>
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+  </nav>
+
 
 
           </div>
@@ -409,10 +518,6 @@
 
 
           
-
-  
-
-
 
         </div>
         
@@ -433,17 +538,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -501,22 +597,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#需求"><span class="nav-number">1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#步骤"><span class="nav-number">2.</span> <span class="nav-text">步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#搭建NDK开发环境"><span class="nav-number">3.</span> <span class="nav-text">搭建NDK开发环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用CMake创建JNI环境"><span class="nav-number">4.</span> <span class="nav-text">使用CMake创建JNI环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c／c-编写字符串加解密方法"><span class="nav-number">5.</span> <span class="nav-text">c／c++编写字符串加解密方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#java层"><span class="nav-number">5.1.</span> <span class="nav-text">java层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#c-c-层"><span class="nav-number">5.2.</span> <span class="nav-text">c/c++层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#加密、解密"><span class="nav-number">5.3.</span> <span class="nav-text">加密、解密</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#验证"><span class="nav-number">5.4.</span> <span class="nav-text">验证</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结束"><span class="nav-number">6.</span> <span class="nav-text">结束</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -657,10 +737,6 @@
 
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
-
 
   
 
