@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="PennHan'blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="Kotlin语言介绍 来源：Kotlin是JetBrains在2010年推出的基于JVM的新编程语言 用途：服务器端程序、Android 应用程序或者在浏览器中运行的前端程序 优势： 简洁、易表现: 你可以编写少得多的代码,并且代码的可读性可能更好. 安全: 在编译初期就处理了各种null的情况，避免了执行时异常。 互操作性:你可以继续使用所有的你用Java写的代码和库，因为两个语言之间的互操作性">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kotlin初探">
+<meta property="og:url" content="https://pennhan.top/2017/06/21/Kotlin初探/index.html">
+<meta property="og:site_name" content="PennHan&#39;blog">
+<meta property="og:description" content="Kotlin语言介绍 来源：Kotlin是JetBrains在2010年推出的基于JVM的新编程语言 用途：服务器端程序、Android 应用程序或者在浏览器中运行的前端程序 优势： 简洁、易表现: 你可以编写少得多的代码,并且代码的可读性可能更好. 安全: 在编译初期就处理了各种null的情况，避免了执行时异常。 互操作性:你可以继续使用所有的你用Java写的代码和库，因为两个语言之间的互操作性">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-05T03:28:28.593Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kotlin初探">
+<meta name="twitter:description" content="Kotlin语言介绍 来源：Kotlin是JetBrains在2010年推出的基于JVM的新编程语言 用途：服务器端程序、Android 应用程序或者在浏览器中运行的前端程序 优势： 简洁、易表现: 你可以编写少得多的代码,并且代码的可读性可能更好. 安全: 在编译初期就处理了各种null的情况，避免了执行时异常。 互操作性:你可以继续使用所有的你用Java写的代码和库，因为两个语言之间的互操作性">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://pennhan.top/2017/06/21/Kotlin初探/">
+
+
+
+
+
+  <title>Kotlin初探 | PennHan'blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">PennHan'blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://pennhan.top/2017/06/21/Kotlin初探/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="PennHan">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="PennHan'blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Kotlin初探</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-21T00:33:03+08:00">
+                2017-06-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Kotlin语言介绍"><a href="#Kotlin语言介绍" class="headerlink" title="Kotlin语言介绍"></a>Kotlin语言介绍</h2><ul>
+<li>来源：Kotlin是JetBrains在2010年推出的基于JVM的新编程语言</li>
+<li>用途：服务器端程序、Android 应用程序或者在浏览器中运行的前端程序</li>
+<li>优势：<ol>
+<li>简洁、易表现: 你可以编写少得多的代码,并且代码的可读性可能更好.</li>
+<li>安全: 在编译初期就处理了各种null的情况，避免了执行时异常。</li>
+<li>互操作性:你可以继续使用所有的你用Java写的代码和库，因为两个语言之间的互操作性是完美的。</li>
+<li>甚至可以在一个项目中使用Kotlin和Java两种语言混合编程</li>
+<li>函数式支持(Lambdas)</li>
+<li>代理</li>
+<li>…</li>
+</ol>
+</li>
+</ul>
+<h2 id="Kotlin概览-vs-Java"><a href="#Kotlin概览-vs-Java" class="headerlink" title="Kotlin概览(vs Java)"></a>Kotlin概览(vs Java)</h2><p>— | — | —<br>定义 | Java  |  Kotlin<br>变量|String string = “Hello”;|var string: String = “Hello”<br>final变量 |final String string = “Hello”;|const val string: String = “Hello”<br>函数 |public boolean testString(String name){…} |open fun testString(val name:String): boolean {…}<br>数组|String[] names = new String[]{“Kyo”, “Ryu”, “Iory”}; String[] emptyStrings = new String[10];<br>|val ints = intArrayOf(1, 3, 5)<br>变长参数 |void hello(String… names){…}|fun hello(vararg names: String){<br>}<br>三元运算符   |int code = isSuccessfully? 200: 400;|int code = if(isSuccessfully) 200 else 400<br>main 函数 |class Main{<br>public static void main(String… args){<br>…<br>}<br>} |fun main(args: Array){<br>…<br>}<br>实例化类    |Date date = new Date(); | val date = Date()<br>延迟初始化成员变量   |public class Hello{<br>    private final String name = “Peter”;<br> }|class Hello{<br>    private val name by lazy{<br>        NameProvider.getName()<br>    }<br> }<br>获得 class 的实例    |public class Hello{<br>    …<br> }<br> …<br> Class&lt;?&gt; clazz = Hello.class;<br> Hello hello = new Hello();<br> Class&lt;?&gt; clazz2 = hello.getClass();<br>|class Hello<br>  val clazz = Hello::class.java<br> val hello = Hello()<br> val clazz2 = hello.javaClass</p>
+<h2 id="Kotlin特性概览"><a href="#Kotlin特性概览" class="headerlink" title="Kotlin特性概览"></a>Kotlin特性概览</h2><h3 id="简洁，使用更少的代码做更多的事"><a href="#简洁，使用更少的代码做更多的事" class="headerlink" title="简洁，使用更少的代码做更多的事"></a>简洁，使用更少的代码做更多的事</h3><p>这是我认为Kotlin最大的优点。更像一种描述性编程语言。</p>
+<h4 id="例子一：数据类"><a href="#例子一：数据类" class="headerlink" title="例子一：数据类"></a>例子一：数据类</h4><p>数据类大量重复的getter和setter相信会是很多人在开发过程中吐槽的一个点。举一个很经典的例子，我们需要一个Person的数据类。</p>
+<p>在Java中，需要这么写：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> sex;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">float</span> height;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">(String name, <span class="keyword">int</span> age, <span class="keyword">int</span> sex, <span class="keyword">float</span> height)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.sex = sex;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">        <span class="keyword">this</span>.height = height;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> age;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(<span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getSex</span><span class="params">()</span> </span>&#123;</span><br><span class="line">         <span class="keyword">return</span> sex;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSex</span><span class="params">(<span class="keyword">int</span> sex)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.sex = sex;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">float</span> <span class="title">getHeight</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> height;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setHeight</span><span class="params">(<span class="keyword">float</span> height)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.height = height;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Person&#123;"</span> +</span><br><span class="line">                <span class="string">"name='"</span> + name + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">", age="</span> + age +</span><br><span class="line">                <span class="string">", sex="</span> + (sex == <span class="number">0</span> ? <span class="string">"男"</span> : <span class="string">"女"</span>) +</span><br><span class="line">                <span class="string">", height="</span> + height +</span><br><span class="line">                <span class="string">'&#125;'</span>;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<p>在Kotlin里，我们只需要一行代码就能完成以上的功能：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">data class <span class="title">Person</span><span class="params">(var name: String,</span></span></span><br><span class="line"><span class="function"><span class="params">                     var age: Int,</span></span></span><br><span class="line"><span class="function"><span class="params">                     var sex: Int,</span></span></span><br><span class="line"><span class="function"><span class="params">                     var height: Float)</span></span></span><br></pre></td></tr></table></figure>
+<h4 id="例子二：区间表达式"><a href="#例子二：区间表达式" class="headerlink" title="例子二：区间表达式"></a>例子二：区间表达式</h4><p>在Java中我们经常要写这样的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= <span class="number">10</span>; i++)&#123;</span><br><span class="line">    System.out.println(i)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是在Kotlin中，支持 .. 操作符形式的区间表达式，我们转换成Kotlin就变成了这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(i in <span class="number">0</span>..<span class="number">10</span>)&#123;</span><br><span class="line">    println(i)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>不仅如此，还有更多相关的功能。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//倒序迭代</span></span><br><span class="line"><span class="keyword">for</span>(i in <span class="number">10</span> downTo <span class="number">0</span>)&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//步长为2的迭代</span></span><br><span class="line"><span class="keyword">for</span>(i in <span class="number">0</span>..<span class="number">10</span> setp <span class="number">2</span>)&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//i在[0,10)区间，排除了10</span></span><br><span class="line"><span class="keyword">for</span>(i in <span class="number">0</span> until <span class="number">10</span>)&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="例子三：Lamda表达式"><a href="#例子三：Lamda表达式" class="headerlink" title="例子三：Lamda表达式"></a>例子三：Lamda表达式</h4><p>Java中：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">btn.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() &#123;</span><br><span class="line">     <span class="meta">@Override</span></span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</span><br><span class="line">         <span class="comment">//dosomething</span></span><br><span class="line">&#125;&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>Kotlin中：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">btn.setOnClickListener &#123; </span><br><span class="line">    <span class="comment">//dosomething </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="例子四：类扩展"><a href="#例子四：类扩展" class="headerlink" title="例子四：类扩展"></a>例子四：类扩展</h4><p>看一个例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">fun MutableList&lt;Int&gt;.swap(index1: Int, index2: Int) &#123;</span><br><span class="line">    val tmp = <span class="keyword">this</span>[index1] <span class="comment">// 'this' 对应该列表</span></span><br><span class="line">    <span class="keyword">this</span>[index1] = <span class="keyword">this</span>[index2]</span><br><span class="line">    <span class="keyword">this</span>[index2] = tmp</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//使用</span></span><br><span class="line">val l = mutableListOf(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line">l.swap(<span class="number">0</span>, <span class="number">2</span>) <span class="comment">// 'swap()' 内部的 'this' 得到 'l' 的值</span></span><br><span class="line">fun Fragment.toast(message: CharSequence, duration: Int = Toast.LENGTH_SHORT) &#123; </span><br><span class="line">    Toast.makeText(getActivity(), message, duration).show()</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//使用</span></span><br><span class="line">fragment.toast(<span class="string">"Hello world!"</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="安全"><a href="#安全" class="headerlink" title="安全"></a>安全</h2><h3 id="例子一：空安全"><a href="#例子一：空安全" class="headerlink" title="例子一：空安全"></a>例子一：空安全</h3><p>一直以来，NullPointException空指针异常在开发中是最低级也最致命的问题。我们往往需要进行各种null的判断以试图去避免NPE的发生。Kotlin基于这个问题，提出了一个空安全的概念，即每个属性默认不可为null。</p>
+<p>如果要允许为空，我们需要手动声明一个变量为可空字符串类型，写为String?</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">var a: String = <span class="string">"abcd"</span></span><br><span class="line">a = <span class="keyword">null</span> <span class="comment">//编译错误</span></span><br><span class="line">var a: String? = <span class="string">"abcd"</span></span><br><span class="line">a = <span class="keyword">null</span> <span class="comment">//编译成功</span></span><br><span class="line">var person: Person? = <span class="keyword">null</span></span><br><span class="line">person.name = <span class="string">"shinelw"</span>  <span class="comment">//编译失败</span></span><br><span class="line">person?.name = <span class="string">"shinelw"</span> <span class="comment">//编译成功</span></span><br><span class="line"><span class="comment">// 这里不能通过编译. Artist 不能是null</span></span><br><span class="line">var notNullArtist: Artist = <span class="keyword">null</span></span><br><span class="line"><span class="comment">// Artist 可以是 null</span></span><br><span class="line">var artist: Artist? = <span class="keyword">null</span></span><br><span class="line"><span class="comment">// 无法编译, artist可能是null，我们需要进行处理</span></span><br><span class="line">artist.print()</span><br><span class="line"><span class="comment">// 只要在artist != null时才会打印</span></span><br><span class="line">artist?.print()</span><br><span class="line"><span class="comment">// 智能转换. 如果我们在之前进行了空检查，则不需要使用安全调用操作符调用</span></span><br><span class="line"><span class="keyword">if</span> (artist != <span class="keyword">null</span>) &#123;</span><br><span class="line">  artist.print()</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 只有在确保artist不是null的情况下才能这么调用，否则它会抛出异常</span></span><br><span class="line">artist!!.print()</span><br><span class="line"><span class="comment">// 使用Elvis操作符来给定一个在是null的情况下的替代值</span></span><br><span class="line">val name = artist?.name ?: <span class="string">"empty"</span></span><br></pre></td></tr></table></figure>
+<h2 id="与Java互操作-混编"><a href="#与Java互操作-混编" class="headerlink" title="与Java互操作(混编)"></a>与Java互操作(混编)</h2><p>这是Kotlin与Scala相比，优势突出的一点。我们可以在Kotlin中调用现存的Java代码，并且也能在Java代码中顺利的调用Kotlin代码。这意味着我们可以马上在现有的Java项目中使用上Kotlin，同时所有之前旧的Java也一样有效。</p>
+<h4 id="Kotlin-调用-Java"><a href="#Kotlin-调用-Java" class="headerlink" title="Kotlin 调用 Java"></a>Kotlin 调用 Java</h4><p>大多数Java代码，可以直接调用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.*</span><br><span class="line"><span class="function">fun <span class="title">demo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    val list = ArrayList&lt;string&gt;()</span><br><span class="line">    list.add(<span class="string">"hello world"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Java-调用-Kotlin"><a href="#Java-调用-Kotlin" class="headerlink" title="Java 调用 Kotlin"></a>Java 调用 Kotlin</h4><p>Kotlin 属性会编译成以下 Java 元素：</p>
+<ul>
+<li>一个 getter 方法，名称通过加前缀 get 算出；</li>
+<li>一个 setter 方法，名称通过加前缀 set 算出（只适用于 var 属性）；</li>
+<li>一个私有字段，与属性名称相同（仅适用于具有幕后字段的属性）。</li>
+</ul>
+<p>例如，var firstName: String 编译成以下 Java 声明：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> String firstName;</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getFirstName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> firstName;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setFirstName</span><span class="params">(String firstName)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.firstName = firstName;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 org.foo.bar 包内的 example.kt 文件中声明的所有的函数和属性，包括扩展函数， 都编译成一个名为 org.foo.bar.ExampleKt 的 Java 类的静态方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// example.kt</span></span><br><span class="line"><span class="keyword">package</span> demo</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span></span></span><br><span class="line"><span class="class"><span class="title">fun</span> <span class="title">bar</span>() </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Java</span></span><br><span class="line"><span class="keyword">new</span> demo.Foo();</span><br><span class="line">demo.ExampleKt.bar();</span><br></pre></td></tr></table></figure>
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><p>在Kotlin中，函数的声明使用fun关键字：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">fun <span class="title">double</span><span class="params">(x: Int)</span>: Int </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">val result = <span class="keyword">double</span>(<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<p>使用.操作符调用成员函数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Simple().foo() <span class="comment">//创建累的实例并调用foo（）方法</span></span><br></pre></td></tr></table></figure>
+<h4 id="中缀符号"><a href="#中缀符号" class="headerlink" title="中缀符号"></a>中缀符号</h4><p>当满足下列条件的时候，函数还可以使用中缀符号调用：</p>
+<ul>
+<li>当函数是成员函数或者扩展函数的时候</li>
+<li>当他们仅有一个参数的时候</li>
+<li>当他们通过infix关键字标记的时候</li>
+</ul>
+<h4 id="默认参数"><a href="#默认参数" class="headerlink" title="默认参数"></a>默认参数</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">fun <span class="title">read</span><span class="params">(b:Array&lt;Byte&gt;,off:Int = <span class="number">0</span>,len:Int = b.size()</span>)</span>&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="返回Unit类型的函数"><a href="#返回Unit类型的函数" class="headerlink" title="返回Unit类型的函数"></a>返回Unit类型的函数</h4><p>相当于java的void类型：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">fun <span class="title">printHello</span><span class="params">(name: String?)</span>: Unit </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (name != <span class="keyword">null</span>)</span><br><span class="line">        println(<span class="string">"Hello $&#123;name&#125;"</span>)</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        println(<span class="string">"Hi there!"</span>)</span><br><span class="line">    <span class="comment">// `return Unit` or `return` is optional</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="单表达式函数"><a href="#单表达式函数" class="headerlink" title="单表达式函数"></a>单表达式函数</h4><p>当一个函数仅返回一个表达式，则可以省略花括号，函数体可以直接跟在=号后面：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">fun <span class="title">double</span><span class="params">(x: Int)</span>: Int </span>= x * <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<h2 id="高阶函数和lambda表达式"><a href="#高阶函数和lambda表达式" class="headerlink" title="高阶函数和lambda表达式"></a>高阶函数和lambda表达式</h2><p>高阶函数就是可以接受函数作为参数并返回一个函数的函数:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">fun &lt;T&gt; lock(lock: Lock, body: () -&gt; T ) : T &#123;</span><br><span class="line">    lock.lock()</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> body()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">finally</span> &#123;</span><br><span class="line">        lock.unlock()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>一般是传递一个字面函数(通常是 lambda 表达式)：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val result = lock(lock, &#123;</span><br><span class="line">sharedResource.operation() &#125;)</span><br></pre></td></tr></table></figure>
+<h4 id="字面函数和函数表达式"><a href="#字面函数和函数表达式" class="headerlink" title="字面函数和函数表达式"></a>字面函数和函数表达式</h4><p>字面函数或函数表达式就是一个 “匿名函数”，也就是没有声明的函数，但立即作为表达式传递下去:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">max(strings, &#123;a, b -&gt; a.length &lt; b.length &#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="代理"><a href="#代理" class="headerlink" title="代理"></a>代理</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">**</span><br><span class="line"> * 被代理接口</span><br><span class="line"> */</span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Base</span> </span>&#123;</span><br><span class="line">    <span class="function">fun <span class="title">display</span><span class="params">()</span></span></span><br><span class="line"><span class="function">&#125;</span></span><br><span class="line"><span class="function"><span class="comment">/**</span></span></span><br><span class="line"><span class="function"><span class="comment"> * 被代理类</span></span></span><br><span class="line"><span class="function"><span class="comment"> */</span></span></span><br><span class="line"><span class="function">open class BaseImpl : Base </span>&#123;</span><br><span class="line">    <span class="function">override fun <span class="title">display</span><span class="params">()</span> </span>= print(<span class="string">"just display me."</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 代理类，使用:以及关键词by进行声明</span></span><br><span class="line"><span class="comment"> * 许代理属性和其他继承属性共用</span></span><br><span class="line"><span class="comment"> * class Drived(base: Base) : Base by base,BaseImpl()</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">class Drived(base: Base) : Base by base</span><br><span class="line"><span class="comment">//使用</span></span><br><span class="line"><span class="function">fun <span class="title">show</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    var b = BaseImpl()</span><br><span class="line">    var drived = Drived(b)</span><br><span class="line">    drived.display()</span><br><span class="line">&#125;</span><br><span class="line">**</span><br><span class="line"> * 代理类型：</span><br><span class="line"> * 懒加载：Lazy</span><br><span class="line"> * 观察者：Delegates.observable()</span><br><span class="line"> * 非空属性：Delegates.notNull&lt;&gt;()</span><br><span class="line"> */</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Water</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> var weight:Int by Delegates.notNull()</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 代理属性</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> val name: String by lazy &#123;</span><br><span class="line">        println(<span class="string">"Lazy......."</span>)</span><br><span class="line">        <span class="string">"Code4Android"</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> var value: String by Delegates.observable(<span class="string">"init value"</span>) &#123;</span><br><span class="line">        d, old, <span class="keyword">new</span> -&gt;</span><br><span class="line">        println(<span class="string">"$d--&gt;$old-&gt;$new"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">fun <span class="title">main</span><span class="params">(arg: Array&lt;String&gt;)</span> </span>&#123;</span><br><span class="line">    show()</span><br><span class="line">    var water = Water()</span><br><span class="line">    println(water.name)</span><br><span class="line">    println(water.name)</span><br><span class="line">    water.value = <span class="string">"11111"</span></span><br><span class="line">    water.value = <span class="string">"22222"</span></span><br><span class="line">    water.value = <span class="string">"33333"</span></span><br><span class="line">    println(water.value)</span><br><span class="line">    println(water.value)</span><br><span class="line">    <span class="comment">//必须先赋值否则IllegalStateException: Property weight should be initialized before get.</span></span><br><span class="line">    water.weight=<span class="number">2</span></span><br><span class="line">    print(water.weight)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Use-Android-APIs-with-Kotlin"><a href="#Use-Android-APIs-with-Kotlin" class="headerlink" title="Use Android APIs with Kotlin"></a>Use Android APIs with Kotlin</h2><h4 id="声明Activity"><a href="#声明Activity" class="headerlink" title="声明Activity"></a>声明Activity</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//in Kotlin</span></span><br><span class="line">class MyActivity : AppCompatActivity() &#123;</span><br><span class="line">  <span class="function">override fun <span class="title">onCreate</span><span class="params">(savedInstanceState: Bundle?)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState)</span><br><span class="line">    setContentView(R.layout.activity)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//in Java</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">    setContentView(R.layout.activity);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="On-click-listener"><a href="#On-click-listener" class="headerlink" title="On-click listener"></a>On-click listener</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//in Kotlin</span></span><br><span class="line">val fab = findViewById(R.id.fab) as FloatingActionButton</span><br><span class="line">fab.setOnClickListener &#123;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//in Java</span></span><br><span class="line">FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);</span><br><span class="line">fab.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() &#123;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View view)</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="Item-click-listener"><a href="#Item-click-listener" class="headerlink" title="Item click listener"></a>Item click listener</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//in Kotlin</span></span><br><span class="line"><span class="keyword">private</span> val mOnNavigationItemSelectedListener</span><br><span class="line">    = BottomNavigationView.OnNavigationItemSelectedListener &#123; item -&gt;</span><br><span class="line">  when (item.itemId) &#123;</span><br><span class="line">    R.id.navigation_home -&gt; &#123;</span><br><span class="line">      mTextMessage.setText(R.string.title_home)</span><br><span class="line">      <span class="keyword">return</span><span class="meta">@OnNavigationItemSelectedListener</span> <span class="keyword">true</span></span><br><span class="line">    &#125;</span><br><span class="line">    R.id.navigation_dashboard -&gt; &#123;</span><br><span class="line">      mTextMessage.setText(R.string.title_dashboard)</span><br><span class="line">      <span class="keyword">return</span><span class="meta">@OnNavigationItemSelectedListener</span> <span class="keyword">true</span></span><br><span class="line">    &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">false</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//in Java</span></span><br><span class="line"><span class="keyword">private</span> BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener</span><br><span class="line">    = <span class="keyword">new</span> BottomNavigationView.OnNavigationItemSelectedListener() &#123;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onNavigationItemSelected</span><span class="params">(@NonNull MenuItem item)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">switch</span> (item.getItemId()) &#123;</span><br><span class="line">      <span class="keyword">case</span> R.id.navigation_home:</span><br><span class="line">        mTextMessage.setText(R.string.title_home);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">      <span class="keyword">case</span> R.id.navigation_dashboard:</span><br><span class="line">        mTextMessage.setText(R.string.title_dashboard);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="学习资料"><a href="#学习资料" class="headerlink" title="学习资料"></a>学习资料</h2><ul>
+<li>官方文档<a href="http://kotlinlang.org/docs/reference/" target="_blank" rel="noopener">http://kotlinlang.org/docs/reference/</a></li>
+<li>中文文档<a href="http://www.kotlincn.net/docs/reference/" target="_blank" rel="noopener">http://www.kotlincn.net/docs/reference/</a></li>
+<li>Kotlin语言中文教程-GitBook<a href="https://huanglizhuo.gitbooks.io/kotlin-in-chinese/content/" target="_blank" rel="noopener">https://huanglizhuo.gitbooks.io/kotlin-in-chinese/content/</a></li>
+<li>Kotlin for android中文教程<a href="https://wangjiegulu.gitbooks.io/kotlin-for-android-developers-zh/zhe_ben_shu_shi_he_ni_ma_ff1f.html" target="_blank" rel="noopener">https://wangjiegulu.gitbooks.io/kotlin-for-android-developers-zh/zhe_ben_shu_shi_he_ni_ma_ff1f.html</a></li>
+<li>java与Kotlin混编<a href="http://kotlinlang.org/docs/reference/java-interop.html" target="_blank" rel="noopener">http://kotlinlang.org/docs/reference/java-interop.html</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/16/微信小程序项目开发总结/" rel="next" title="微信小程序项目开发总结">
+                <i class="fa fa-chevron-left"></i> 微信小程序项目开发总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/10/android-deviceId-20170310/" rel="prev" title="Android获取设备唯一标识">
+                Android获取设备唯一标识 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">PennHan</p>
+              <p class="site-description motion-element" itemprop="description">在Android的道路上摸爬滚打，望有光明向我招手。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Kotlin语言介绍"><span class="nav-number">1.</span> <span class="nav-text">Kotlin语言介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kotlin概览-vs-Java"><span class="nav-number">2.</span> <span class="nav-text">Kotlin概览(vs Java)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kotlin特性概览"><span class="nav-number">3.</span> <span class="nav-text">Kotlin特性概览</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简洁，使用更少的代码做更多的事"><span class="nav-number">3.1.</span> <span class="nav-text">简洁，使用更少的代码做更多的事</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#例子一：数据类"><span class="nav-number">3.1.1.</span> <span class="nav-text">例子一：数据类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#例子二：区间表达式"><span class="nav-number">3.1.2.</span> <span class="nav-text">例子二：区间表达式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#例子三：Lamda表达式"><span class="nav-number">3.1.3.</span> <span class="nav-text">例子三：Lamda表达式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#例子四：类扩展"><span class="nav-number">3.1.4.</span> <span class="nav-text">例子四：类扩展</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安全"><span class="nav-number">4.</span> <span class="nav-text">安全</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#例子一：空安全"><span class="nav-number">4.1.</span> <span class="nav-text">例子一：空安全</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#与Java互操作-混编"><span class="nav-number">5.</span> <span class="nav-text">与Java互操作(混编)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Kotlin-调用-Java"><span class="nav-number">5.0.1.</span> <span class="nav-text">Kotlin 调用 Java</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Java-调用-Kotlin"><span class="nav-number">5.0.2.</span> <span class="nav-text">Java 调用 Kotlin</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#函数"><span class="nav-number">6.</span> <span class="nav-text">函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#中缀符号"><span class="nav-number">6.0.1.</span> <span class="nav-text">中缀符号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#默认参数"><span class="nav-number">6.0.2.</span> <span class="nav-text">默认参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#返回Unit类型的函数"><span class="nav-number">6.0.3.</span> <span class="nav-text">返回Unit类型的函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单表达式函数"><span class="nav-number">6.0.4.</span> <span class="nav-text">单表达式函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高阶函数和lambda表达式"><span class="nav-number">7.</span> <span class="nav-text">高阶函数和lambda表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#字面函数和函数表达式"><span class="nav-number">7.0.1.</span> <span class="nav-text">字面函数和函数表达式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代理"><span class="nav-number">8.</span> <span class="nav-text">代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Use-Android-APIs-with-Kotlin"><span class="nav-number">9.</span> <span class="nav-text">Use Android APIs with Kotlin</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#声明Activity"><span class="nav-number">9.0.1.</span> <span class="nav-text">声明Activity</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#On-click-listener"><span class="nav-number">9.0.2.</span> <span class="nav-text">On-click listener</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Item-click-listener"><span class="nav-number">9.0.3.</span> <span class="nav-text">Item click listener</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#学习资料"><span class="nav-number">10.</span> <span class="nav-text">学习资料</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">PennHan</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

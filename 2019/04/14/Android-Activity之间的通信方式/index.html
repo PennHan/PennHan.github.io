@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="PennHan'blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="Activity之间通信方式 Intent 借助类的静态变量 借助全局变量/Application 借助外部工具 借助SharedPreference  使用Android数据库SQLite 赤裸裸的使用File Android剪切板    Intent借助四大组件（Activity、Service、BroadcastReceiver、ContentProvider），通过Intent传递数据，进">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android Activity之间的通信方式">
+<meta property="og:url" content="https://pennhan.top/2019/04/14/Android-Activity之间的通信方式/index.html">
+<meta property="og:site_name" content="PennHan&#39;blog">
+<meta property="og:description" content="Activity之间通信方式 Intent 借助类的静态变量 借助全局变量/Application 借助外部工具 借助SharedPreference  使用Android数据库SQLite 赤裸裸的使用File Android剪切板    Intent借助四大组件（Activity、Service、BroadcastReceiver、ContentProvider），通过Intent传递数据，进">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-14T04:40:52.926Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android Activity之间的通信方式">
+<meta name="twitter:description" content="Activity之间通信方式 Intent 借助类的静态变量 借助全局变量/Application 借助外部工具 借助SharedPreference  使用Android数据库SQLite 赤裸裸的使用File Android剪切板    Intent借助四大组件（Activity、Service、BroadcastReceiver、ContentProvider），通过Intent传递数据，进">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://pennhan.top/2019/04/14/Android-Activity之间的通信方式/">
+
+
+
+
+
+  <title>Android Activity之间的通信方式 | PennHan'blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">PennHan'blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://pennhan.top/2019/04/14/Android-Activity之间的通信方式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="PennHan">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="PennHan'blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android Activity之间的通信方式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-14T11:37:59+08:00">
+                2019-04-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Activity之间通信方式"><a href="#Activity之间通信方式" class="headerlink" title="Activity之间通信方式"></a>Activity之间通信方式</h3><ul>
+<li>Intent</li>
+<li>借助类的静态变量</li>
+<li>借助全局变量/Application</li>
+<li>借助外部工具<ul>
+<li>借助SharedPreference </li>
+<li>使用Android数据库SQLite</li>
+<li>赤裸裸的使用File</li>
+<li>Android剪切板</li>
+</ul>
+</li>
+</ul>
+<h4 id="Intent"><a href="#Intent" class="headerlink" title="Intent"></a>Intent</h4><p>借助四大组件（Activity、Service、BroadcastReceiver、ContentProvider），通过Intent传递数据，进行Activity间通信。</p>
+<ol>
+<li>Activity跳转传递Intent</li>
+<li>广播传递Intent</li>
+<li>ContentProvider保存数据，B获取数据。</li>
+<li>Service</li>
+</ol>
+<h4 id="借助类的静态变量"><a href="#借助类的静态变量" class="headerlink" title="借助类的静态变量"></a>借助类的静态变量</h4><p>B中定义静态变量，A中设置B中的静态变量，B中就能获取到A设置的静态变量，当然该静态变量可以设置在任意地方。</p>
+<h4 id="借助全局变量来实现-Application"><a href="#借助全局变量来实现-Application" class="headerlink" title="借助全局变量来实现/Application"></a>借助全局变量来实现/Application</h4><p>一般可以把变量放在Applicaiton这个全局的变量中，通过获取Applicaiton来设置和获取数据变量。</p>
+<p>也可以设置单例模式。道理同Applicaiton</p>
+<h4 id="借助外部工具"><a href="#借助外部工具" class="headerlink" title="借助外部工具"></a>借助外部工具</h4><ol>
+<li>sp存储</li>
+<li>数据库存储</li>
+<li>文件存储</li>
+<li>Android剪贴板等存储方式</li>
+</ol>
+<h3 id="Activity和Service间通信"><a href="#Activity和Service间通信" class="headerlink" title="Activity和Service间通信"></a>Activity和Service间通信</h3><ul>
+<li>startService</li>
+<li>bindService</li>
+<li>回调接口</li>
+<li>broadcast(广播)</li>
+</ul>
+<h4 id="startService"><a href="#startService" class="headerlink" title="startService"></a>startService</h4><p>单向的，只能Activity向Service传递数据，该service不与Activity绑定。</p>
+<h4 id="bindService"><a href="#bindService" class="headerlink" title="bindService"></a>bindService</h4><p>双向传递数据，通过bindService向Service传递数据，通过ServiceConnection向Activity传递数据。</p>
+<h4 id="回调接口"><a href="#回调接口" class="headerlink" title="回调接口"></a>回调接口</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">OnProgressListener</span> ｛</span></span><br><span class="line"><span class="class">    <span class="title">void</span> <span class="title">onProgress</span>(<span class="title">int</span> <span class="title">progress</span>)</span>;</span><br><span class="line">｝</span><br></pre></td></tr></table></figure>
+<p>Service 代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MsgService</span> <span class="keyword">extends</span> <span class="title">Service</span> ｛</span></span><br><span class="line"><span class="class">    /**</span></span><br><span class="line"><span class="class">     * 进度条的最大值</span></span><br><span class="line"><span class="class">     */</span></span><br><span class="line"><span class="class">    <span class="title">public</span> <span class="title">static</span> <span class="title">final</span> <span class="title">int</span> <span class="title">MAX_PROGRESS</span> </span>= <span class="number">100</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 进度条的进度值</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> progress = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 更新进度的回调接口</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> OnProgressListener onProgressListener;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 注册回调接口的方法，供外部调用</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> onProgressListener</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setOnProgressListener</span><span class="params">(OnProgressListener onProgressListener)</span> ｛</span></span><br><span class="line"><span class="function">        <span class="keyword">this</span>.onProgressListener </span>= onProgressListener;</span><br><span class="line">    ｝</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 增加get()方法，供Activity调用</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 下载进度</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getProgress</span><span class="params">()</span> ｛</span></span><br><span class="line"><span class="function">        return progress</span>;</span><br><span class="line">    ｝</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 模拟下载任务，每秒钟更新一次</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startDownLoad</span><span class="params">()</span>｛</span></span><br><span class="line"><span class="function">        new <span class="title">Thread</span><span class="params">(new Runnable()</span> ｛</span></span><br><span class="line"><span class="function">            @Override</span></span><br><span class="line"><span class="function">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> ｛</span></span><br><span class="line"><span class="function">                <span class="title">while</span><span class="params">(progress &lt; MAX_PROGRESS)</span>｛</span></span><br><span class="line"><span class="function">                    progress +</span>= <span class="number">5</span>;</span><br><span class="line">                    <span class="comment">//进度发生变化通知调用方</span></span><br><span class="line">                    <span class="keyword">if</span>(onProgressListener != <span class="keyword">null</span>)｛</span><br><span class="line">                        onProgressListener.onProgress(progress);</span><br><span class="line">                    ｝</span><br><span class="line">                    <span class="keyword">try</span> ｛</span><br><span class="line">                        Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">                    ｝ <span class="keyword">catch</span> (InterruptedException e) ｛</span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                    ｝</span><br><span class="line">                ｝</span><br><span class="line">            ｝</span><br><span class="line">        ｝).start();</span><br><span class="line">    ｝</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 返回一个Binder对象</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> IBinder <span class="title">onBind</span><span class="params">(Intent intent)</span> ｛</span></span><br><span class="line"><span class="function">        return new <span class="title">MsgBinder</span><span class="params">()</span></span>;</span><br><span class="line">    ｝</span><br><span class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MsgBinder</span> <span class="keyword">extends</span> <span class="title">Binder</span>｛</span></span><br><span class="line"><span class="class">        /**</span></span><br><span class="line"><span class="class">         * 获取当前<span class="title">Service</span>的实例</span></span><br><span class="line"><span class="class">         * @<span class="title">return</span></span></span><br><span class="line"><span class="class">         */</span></span><br><span class="line"><span class="class">        <span class="title">public</span> <span class="title">MsgService</span> <span class="title">getService</span>()｛</span></span><br><span class="line"><span class="class">            <span class="title">return</span> <span class="title">MsgService</span>.<span class="title">this</span></span>;</span><br><span class="line">        ｝</span><br><span class="line">    ｝</span><br><span class="line">｝</span><br></pre></td></tr></table></figure></p>
+<p>Activity代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> ｛</span></span><br><span class="line"><span class="class">    <span class="title">private</span> <span class="title">MsgService</span> <span class="title">msgService</span></span>;</span><br><span class="line">    <span class="keyword">private</span> ProgressBar mProgressBar;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> ｛</span></span><br><span class="line"><span class="function">        <span class="keyword">super</span>.<span class="title">onCreate</span><span class="params">(savedInstanceState)</span></span>;</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        <span class="comment">//绑定Service</span></span><br><span class="line">        Intent intent = <span class="keyword">new</span> Intent(<span class="string">"com.example.communication.MSG_ACTION"</span>);</span><br><span class="line">        bindService(intent, conn, Context.BIND_AUTO_CREATE);</span><br><span class="line">        mProgressBar = (ProgressBar) findViewById(R.id.progressBar1);</span><br><span class="line">        Button mButton = (Button) findViewById(R.id.button1);</span><br><span class="line">        mButton.setOnClickListener(<span class="keyword">new</span> OnClickListener() ｛</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> ｛</span></span><br><span class="line"><span class="function">                <span class="comment">//开始下载</span></span></span><br><span class="line"><span class="function">                msgService.<span class="title">startDownLoad</span><span class="params">()</span></span>;</span><br><span class="line">            ｝</span><br><span class="line">        ｝);</span><br><span class="line">    ｝</span><br><span class="line">    ServiceConnection conn = <span class="keyword">new</span> ServiceConnection() ｛</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onServiceDisconnected</span><span class="params">(ComponentName name)</span> ｛</span></span><br><span class="line"><span class="function">        ｝</span></span><br><span class="line"><span class="function">        @Override</span></span><br><span class="line"><span class="function">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onServiceConnected</span><span class="params">(ComponentName name, IBinder service)</span> ｛</span></span><br><span class="line"><span class="function">            <span class="comment">//返回一个MsgService对象</span></span></span><br><span class="line"><span class="function">            msgService </span>= ((MsgService.MsgBinder)service).getService();</span><br><span class="line">            <span class="comment">//注册回调接口来接收下载进度的变化</span></span><br><span class="line">            msgService.setOnProgressListener(<span class="keyword">new</span> OnProgressListener() ｛</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onProgress</span><span class="params">(<span class="keyword">int</span> progress)</span> ｛</span></span><br><span class="line"><span class="function">                    mProgressBar.<span class="title">setProgress</span><span class="params">(progress)</span></span>;</span><br><span class="line">                ｝</span><br><span class="line">            ｝);</span><br><span class="line">        ｝</span><br><span class="line">    ｝;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> ｛</span></span><br><span class="line"><span class="function">        <span class="title">unbindService</span><span class="params">(conn)</span></span>;</span><br><span class="line">        <span class="keyword">super</span>.onDestroy();</span><br><span class="line">    ｝</span><br><span class="line">｝</span><br></pre></td></tr></table></figure>
+<h4 id="通过broadcast-广播-的形式"><a href="#通过broadcast-广播-的形式" class="headerlink" title="通过broadcast(广播)的形式"></a>通过broadcast(广播)的形式</h4><p>Activity注册广播，Service发送广播给Activity接收。</p>
+<h3 id="Activity和Fragment间的通信"><a href="#Activity和Fragment间的通信" class="headerlink" title="Activity和Fragment间的通信"></a>Activity和Fragment间的通信</h3><ul>
+<li>回调接口</li>
+<li>getActivity（）</li>
+<li>广播</li>
+<li>handler</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/26/Linux常用命令/" rel="next" title="Linux常用命令">
+                <i class="fa fa-chevron-left"></i> Linux常用命令
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">PennHan</p>
+              <p class="site-description motion-element" itemprop="description">在Android的道路上摸爬滚打，望有光明向我招手。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Activity之间通信方式"><span class="nav-number">1.</span> <span class="nav-text">Activity之间通信方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Intent"><span class="nav-number">1.1.</span> <span class="nav-text">Intent</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#借助类的静态变量"><span class="nav-number">1.2.</span> <span class="nav-text">借助类的静态变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#借助全局变量来实现-Application"><span class="nav-number">1.3.</span> <span class="nav-text">借助全局变量来实现/Application</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#借助外部工具"><span class="nav-number">1.4.</span> <span class="nav-text">借助外部工具</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Activity和Service间通信"><span class="nav-number">2.</span> <span class="nav-text">Activity和Service间通信</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#startService"><span class="nav-number">2.1.</span> <span class="nav-text">startService</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bindService"><span class="nav-number">2.2.</span> <span class="nav-text">bindService</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#回调接口"><span class="nav-number">2.3.</span> <span class="nav-text">回调接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#通过broadcast-广播-的形式"><span class="nav-number">2.4.</span> <span class="nav-text">通过broadcast(广播)的形式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Activity和Fragment间的通信"><span class="nav-number">3.</span> <span class="nav-text">Activity和Fragment间的通信</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">PennHan</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

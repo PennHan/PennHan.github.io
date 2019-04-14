@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="前端,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="PennHan'blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="需求开发一个项目时一般都会有前台、后台。前台负责展示数据、用户交互；后台负责数据的处理和存储。 前提 ✦开发阶段，前台和后台按照接口文档进行开发，这套接口规范相当于前台和后台之间交互的协议。 ✦一般来说前台和后台的开发进度都会有偏差。  问题 ✦在开发阶段，前端的展示和交互需要依赖后台的数据；而后台的开发不需要前端配合，因为后台可以自己写请求做测试。 ✦要提高效率，就需要在开发阶段结束，联调阶段开">
+<meta name="keywords" content="前端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端脱离后台的敏捷开发">
+<meta property="og:url" content="https://pennhan.top/2018/11/18/前端脱离后台的敏捷开发/index.html">
+<meta property="og:site_name" content="PennHan&#39;blog">
+<meta property="og:description" content="需求开发一个项目时一般都会有前台、后台。前台负责展示数据、用户交互；后台负责数据的处理和存储。 前提 ✦开发阶段，前台和后台按照接口文档进行开发，这套接口规范相当于前台和后台之间交互的协议。 ✦一般来说前台和后台的开发进度都会有偏差。  问题 ✦在开发阶段，前端的展示和交互需要依赖后台的数据；而后台的开发不需要前端配合，因为后台可以自己写请求做测试。 ✦要提高效率，就需要在开发阶段结束，联调阶段开">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-05T03:28:28.595Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="前端脱离后台的敏捷开发">
+<meta name="twitter:description" content="需求开发一个项目时一般都会有前台、后台。前台负责展示数据、用户交互；后台负责数据的处理和存储。 前提 ✦开发阶段，前台和后台按照接口文档进行开发，这套接口规范相当于前台和后台之间交互的协议。 ✦一般来说前台和后台的开发进度都会有偏差。  问题 ✦在开发阶段，前端的展示和交互需要依赖后台的数据；而后台的开发不需要前端配合，因为后台可以自己写请求做测试。 ✦要提高效率，就需要在开发阶段结束，联调阶段开">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://pennhan.top/2018/11/18/前端脱离后台的敏捷开发/">
+
+
+
+
+
+  <title>前端脱离后台的敏捷开发 | PennHan'blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">PennHan'blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://pennhan.top/2018/11/18/前端脱离后台的敏捷开发/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="PennHan">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="PennHan'blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">前端脱离后台的敏捷开发</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-18T00:51:21+08:00">
+                2018-11-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><p>开发一个项目时一般都会有前台、后台。前台负责展示数据、用户交互；后台负责数据的处理和存储。</p>
+<h4 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h4><ul>
+<li>✦开发阶段，前台和后台按照接口文档进行开发，这套接口规范相当于前台和后台之间交互的协议。</li>
+<li>✦一般来说前台和后台的开发进度都会有偏差。</li>
+</ul>
+<h4 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h4><ol>
+<li>✦在开发阶段，前端的展示和交互需要依赖后台的数据；而后台的开发不需要前端配合，因为后台可以自己写请求做测试。</li>
+<li>✦要提高效率，就需要在开发阶段结束，联调阶段开始之前，尽可能的提高代码完成度和代码准确性。</li>
+</ol>
+<p>所以，就引出了以下需求：前端脱离后台的独立开发。</p>
+<blockquote>
+<p>这里的独立开发不是单纯的脱离后台的开发，而是可以保证代码完成度和代码准确性前提下的，脱离后台的开发。</p>
+</blockquote>
+<h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h3><p>前端独立开发所要达到的目的就是：</p>
+<ul>
+<li>✦ 在连调阶段之前，完成绝大部分的编码工作，工作量尽可能往前拉</li>
+<li>✦ 与后台平行工作，互不干扰，提高了工作效率。</li>
+<li>✦ 保证编码的准确性。</li>
+</ul>
+<p>#最理想的情况是，在连调阶段连调一个接口，我不用修改一行代码，或者只需要切换一下环境就完成了一个接口的连调，包括接口周边逻辑的测试。#</p>
+<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><ul>
+<li>✦ 前端使用写死的假数据</li>
+<li>✦ 使用挡板（打转工具）</li>
+</ul>
+<h4 id="使用挡板"><a href="#使用挡板" class="headerlink" title="使用挡板"></a>使用挡板</h4><ul>
+<li>✦ 自己开发挡板</li>
+<li>✦ Mock.js</li>
+<li>✦ Moco</li>
+</ul>
+<h5 id="自己开发挡板"><a href="#自己开发挡板" class="headerlink" title="自己开发挡板"></a>自己开发挡板</h5><ol>
+<li>自己写一套服务，部署在服务器上。</li>
+<li>通过Web服务录入数据到mongoDB。</li>
+<li>提供给前端的接口，并且接口数据直接从mongoDB读取返回。</li>
+</ol>
+<p>优点：自己开发的挡板比较放心？<br>缺点：开发挡板需要花时间。</p>
+<h4 id="Mock-js"><a href="#Mock-js" class="headerlink" title="Mock.js"></a>Mock.js</h4><p>实例教程<br>生成随机数据，拦截Ajax请求，使用如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用 Mock</span></span><br><span class="line">var Mock = require(<span class="string">'mockjs'</span>)</span><br><span class="line">var data = Mock.mock(&#123;</span><br><span class="line">    <span class="comment">// 属性 list 的值是一个数组，其中含有 1 到 10 个元素</span></span><br><span class="line">    <span class="string">'list|1-10'</span>: [&#123;</span><br><span class="line">        <span class="comment">// 属性 id 是一个自增数，起始值为 1，每次增 1</span></span><br><span class="line">        <span class="string">'id|+1'</span>: <span class="number">1</span></span><br><span class="line">    &#125;]</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// 输出结果</span></span><br><span class="line">console.log(JSON.stringify(data, <span class="keyword">null</span>, <span class="number">4</span>))</span><br></pre></td></tr></table></figure>
+<ol>
+<li>配置模拟数据：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Mock.mock(<span class="string">'http://g.cn'</span>, &#123;</span><br><span class="line">    <span class="string">'name'</span>     : <span class="string">'[@name](/user/name)()'</span>,</span><br><span class="line">    <span class="string">'age|1-100'</span>: <span class="number">100</span>,</span><br><span class="line">    <span class="string">'color'</span>    : <span class="string">'[@color](/user/color)'</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>发送ajax请求(jquery版)</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$.ajax(&#123;</span><br><span class="line">    url: <span class="string">'http://g.cn'</span>,</span><br><span class="line">&#125;).done(function(data, status, xhr)&#123;</span><br><span class="line">    console.log(</span><br><span class="line">        JSON.stringify(data, <span class="keyword">null</span>, <span class="number">4</span>)</span><br><span class="line">    )    </span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>查看响应的结果</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 结果1</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">"name"</span>: <span class="string">"Elizabeth Hall"</span>,</span><br><span class="line">    <span class="string">"age"</span>: <span class="number">91</span>,</span><br><span class="line">    <span class="string">"color"</span>: <span class="string">"#0e64ea"</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 结果2</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">"name"</span>: <span class="string">"Michael Taylor"</span>,</span><br><span class="line">    <span class="string">"age"</span>: <span class="number">61</span>,</span><br><span class="line">    <span class="string">"color"</span>: <span class="string">"#081086"</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 结果N ..</span></span><br></pre></td></tr></table></figure>
+<p>优点：随机数据<br>缺点：有学习成本，前端。</p>
+<h4 id="Moco"><a href="#Moco" class="headerlink" title="Moco"></a>Moco</h4><p>写一个接口的配置文件:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="string">"response"</span> :</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="string">"text"</span> : <span class="string">"Hello, Moco"</span></span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>将配置文件和jar包放到服务器上，执行以下命令：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar moco-runner-&lt;version&gt;-standalone.jar http -p <span class="number">12306</span> -c foo.json</span><br></pre></td></tr></table></figure>
+<p>优点：简单易用，工作量极小，适用范围广。<br>缺点：不能随机数据。</p>
+<h3 id="辅助工具"><a href="#辅助工具" class="headerlink" title="辅助工具"></a>辅助工具</h3><h4 id="postman–接口测试工具"><a href="#postman–接口测试工具" class="headerlink" title="postman–接口测试工具"></a>postman–接口测试工具</h4><p>参照通过postman提升接口测试效率</p>
+<h4 id="Transmit–FTP工具"><a href="#Transmit–FTP工具" class="headerlink" title="Transmit–FTP工具"></a>Transmit–FTP工具</h4><p>官网传送<br>破解版传送</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag"># 前端</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/10/android-deviceId-20170310/" rel="next" title="Android获取设备唯一标识">
+                <i class="fa fa-chevron-left"></i> Android获取设备唯一标识
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/03/Android-Studio常用插件汇总/" rel="prev" title="Android Studio常用插件汇总">
+                Android Studio常用插件汇总 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">PennHan</p>
+              <p class="site-description motion-element" itemprop="description">在Android的道路上摸爬滚打，望有光明向我招手。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#需求"><span class="nav-number">1.</span> <span class="nav-text">需求</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#前提"><span class="nav-number">1.1.</span> <span class="nav-text">前提</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#问题"><span class="nav-number">1.2.</span> <span class="nav-text">问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#目的"><span class="nav-number">2.</span> <span class="nav-text">目的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法"><span class="nav-number">3.</span> <span class="nav-text">解决方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用挡板"><span class="nav-number">3.1.</span> <span class="nav-text">使用挡板</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#自己开发挡板"><span class="nav-number">3.1.1.</span> <span class="nav-text">自己开发挡板</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Mock-js"><span class="nav-number">3.2.</span> <span class="nav-text">Mock.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Moco"><span class="nav-number">3.3.</span> <span class="nav-text">Moco</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#辅助工具"><span class="nav-number">4.</span> <span class="nav-text">辅助工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#postman–接口测试工具"><span class="nav-number">4.1.</span> <span class="nav-text">postman–接口测试工具</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Transmit–FTP工具"><span class="nav-number">4.2.</span> <span class="nav-text">Transmit–FTP工具</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">PennHan</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
